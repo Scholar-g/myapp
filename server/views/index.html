@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <title>hello</title>
+  <style>
+    .fack {
+      margin: 150px 30%;
+    }
+  </style>
+</head>
+
+<body>
+  <h1 class="fack"></h1>
+  <input type="file" id="coverPhoto-file"/>
+</body>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script>
+  $(function() {
+    $.get("http://localhost:3000/userInfo", { "code": "bjpks" }, function (res) {
+      console.log(res)
+      let ctn = res.data.map(item => {
+        return `<div><span style='margin: 50px;'>${item.time}</span>${item.num}</div>`
+      })
+      $('.fack').html(ctn.join(''))
+    })
+    $("#coverPhoto-file").change(function() {
+      // xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded; charset=utf-8");
+      var formData = new FormData();
+      var file = document.getElementById("coverPhoto-file").files[0];
+      // formData.append("url", "http://gs-oa-server.dev.youximao.com/web/common/getImgUploadInfo");
+      formData.append("fileName", file.name);
+      formData.append("file", file);
+      $.post("http://localhost:3000/upload", { ...formData }, function (res) {
+        console.log(res)
+      })
+    })
+  })
+</script>
+
+</html>
